@@ -1,9 +1,12 @@
 <?php
+// Le routeur gère GET et POST pour chaque page.
 
 use App\Controllers\AuthController;
-use App\Controllers\CoachController;
 
 $router->get('/login', [AuthController::class, 'login']);
-$router->post('/login', [AuthController::class, 'authenticate']);
+$router->post('/login', [AuthController::class, 'login']);
 
-$router->get('/coaches', [CoachController::class, 'index']);
+$router->get('/register', [AuthController::class, 'register']);
+$router->post('/register', [AuthController::class, 'register']);
+
+?>
