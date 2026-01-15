@@ -59,14 +59,21 @@ class AuthController extends Controller {
             $password = $_POST['password'];
             $role = $_POST['role'];
 
-            $userModel = new Utilisateur();
-            if ($userModel->register($nom, $prenom, $email, $password, $role)) {
-                $success = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
+            if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($role)) {
+                $error = "Tous les champs sont obligatoires.";
             } else {
-                $error = "Impossible de créer le compte. Vérifiez les informations SVP . ";
+
+                $user = new Utilisateur();
+                if ($user->register($nom, $prenom, $email, $password, $role)) {
+                    $success = "Inscription réussie. Vous pouvez vous connecter.";
+                } else {
+                    $error = "Email déjà utilisé ou rôle invalide.";
+                }
+                
             }
         }
 
         $this->view('auth/register', compact('error', 'success'));
     }
+
 }

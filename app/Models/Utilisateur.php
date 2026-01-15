@@ -50,6 +50,7 @@ class Utilisateur extends Model {
     public function getRole(): string { return $this->role; }
 
     // INSCRIPTION
+    
     public function register(string $nom, string $prenom, string $email, string $password, string $role): bool {
         if (!in_array($role, ['coach', 'sportif'])) return false;
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
@@ -66,7 +67,8 @@ class Utilisateur extends Model {
         return $stmt->execute([$nom, $prenom, $email, $hashedPassword, $role]);
     }
 
-    // CONNEXION
+    // CONNEXION 
+
     public function login(string $email, string $password): array|false {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
