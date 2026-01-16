@@ -1,10 +1,7 @@
 <?php
-namespace App\Models;
+require_once __DIR__ . '/../config/database.php';
 
-use Core\Model;
-use PDO;
-
-class Utilisateur extends Model {
+class Utilisateur {
 
     protected ?int $id = null;
     protected string $nom = '';
@@ -12,9 +9,11 @@ class Utilisateur extends Model {
     protected string $email = '';
     protected string $password = '';
     protected string $role = '';
+    protected PDO $pdo;
 
+    // Constructeur
     public function __construct(?int $id = null){
-        parent::__construct();
+        $this->pdo = Database::getConnection();
 
         if ($id !== null) {
             $this->id = $id;
@@ -22,14 +21,14 @@ class Utilisateur extends Model {
         }
     }
 
-    protected function load(): bool {
-        
+    // Charger utilisateur
+    protected function load(): bool{
         if ($this->id === null) return false;
 
-        $sql = "SELECT * FROM users WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$this->id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $data = $stmt->fetch();
 
         if (!$data) return false;
 
@@ -42,37 +41,37 @@ class Utilisateur extends Model {
         return true;
     }
 
-    // GETTERS
+    // Getters
     public function getId(): ?int { return $this->id; }
     public function getNom(): string { return $this->nom; }
     public function getPrenom(): string { return $this->prenom; }
     public function getEmail(): string { return $this->email; }
     public function getRole(): string { return $this->role; }
 
-    // INSCRIPTION
-    
-    public function register(string $nom, string $prenom, string $email, string $password, string $role): bool {
+    // Inscription
+    public function register(string $nom, string $prenom, string $email, string $password, string $role): bool{
+
         if (!in_array($role, ['coach', 'sportif'])) return false;
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
 
-        $check = $this->db->prepare("SELECT id FROM users WHERE email = ?");
+        $check = $this->pdo->prepare("SELECT id FROM users WHERE email = ?");
         $check->execute([$email]);
         if ($check->rowCount() > 0) return false;
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (nom, prenom, email, password, role) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $this->db->prepare($sql);
-
+        $stmt = $this->pdo->prepare("
+            INSERT INTO users (nom, prenom, email, password, role)
+            VALUES (?, ?, ?, ?, ?)
+        ");
         return $stmt->execute([$nom, $prenom, $email, $hashedPassword, $role]);
     }
 
-    // CONNEXION 
-
-    public function login(string $email, string $password): array|false {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+    // Connexion
+    public static function login(PDO $pdo, string $email, string $password): array|false{
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch();
 
         if (!$user) return false;
         if (!password_verify($password, $user['password'])) return false;

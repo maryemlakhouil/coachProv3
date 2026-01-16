@@ -70,7 +70,7 @@
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" class="space-y-4">
+                <form method="POST" class="space-y-4"action="/auth/register">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1.5">
                             <label class="text-xs font-medium text-gray-400 ml-1">Nom</label>
@@ -108,7 +108,7 @@
 
                 <p class="text-sm text-gray-500 mt-8 text-center">
                     Déjà inscrit ?
-                    <a href="login.php" class="text-brand-purple font-semibold hover:underline decoration-brand-purple/30">Se connecter</a>
+                    <a href="/auth/login.php" class="text-brand-purple font-semibold hover:underline decoration-brand-purple/30">Se connecter</a>
                 </p>
             </div>
         </div>
