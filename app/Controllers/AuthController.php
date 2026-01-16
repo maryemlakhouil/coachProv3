@@ -7,7 +7,6 @@ use App\Models\Utilisateur;
 class AuthController extends Controller {
 
     public function login(){
-
         session_start();
         $error = '';
 
@@ -18,7 +17,6 @@ class AuthController extends Controller {
             if (empty($email) || empty($password)) {
                 $error = "Tous les champs sont obligatoires.";
             } else {
-
                 $userModel = new Utilisateur();
                 $user = $userModel->login($email, $password);
 
@@ -28,13 +26,10 @@ class AuthController extends Controller {
                     $_SESSION['prenom']  = $user['prenom'];
                     $_SESSION['role']    = $user['role'];
 
-                    // redirection selon rôle
                     if ($user['role'] === 'coach') {
                         header('Location: /coach/dashbord');
-                    } else if ($user['role'] === 'sportif') {
-                        header('Location: /sportif/dashbord');
                     } else {
-                        header('Location: /');
+                        header('Location: /sportif/dashbord');
                     }
                     exit;
                 } else {
@@ -43,11 +38,10 @@ class AuthController extends Controller {
             }
         }
 
-        $this->view('auth/login', compact('error'));
+        $this->view('login', compact('error'));
     }
 
     public function register(){
-
         session_start();
         $error = '';
         $success = '';
@@ -62,18 +56,28 @@ class AuthController extends Controller {
             if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($role)) {
                 $error = "Tous les champs sont obligatoires.";
             } else {
-
                 $user = new Utilisateur();
                 if ($user->register($nom, $prenom, $email, $password, $role)) {
+
                     $success = "Inscription réussie. Vous pouvez vous connecter.";
+                    $createdUser = $user->findByEmail($email);
+
+                    $_SESSION['user_id'] = $createdUser['id'];
+                    $_SESSION['role']    = $createdUser['role'];
+
+                    if ($createdUser['role'] === 'coach') {
+                        header('Location: /coach/profile');
+                        exit;
+                    }
+                    header('Location: /login');
+                    exit;
                 } else {
                     $error = "Email déjà utilisé ou rôle invalide.";
                 }
-                
             }
         }
 
-        $this->view('auth/register', compact('error', 'success'));
+        $this->view('../auth/register', compact('error', 'success'));
     }
-
 }
+
