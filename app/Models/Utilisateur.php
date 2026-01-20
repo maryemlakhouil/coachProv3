@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+namespace App\Models;
 
+use Core\Database;
+use PDO;
 class Utilisateur {
 
     protected ?int $id = null;
@@ -13,7 +15,7 @@ class Utilisateur {
 
     // Constructeur
     public function __construct(?int $id = null){
-        $this->pdo = Database::getConnection();
+        $this->pdo = Database::getInstance();
 
         if ($id !== null) {
             $this->id = $id;
@@ -68,13 +70,17 @@ class Utilisateur {
     }
 
     // Connexion
-    public static function login(PDO $pdo, string $email, string $password): array|false{
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+    
 
-        if (!$user) return false;
-        if (!password_verify($password, $user['password'])) return false;
+     public function login(string $email, string $password): array|false
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user || !password_verify($password, $user['password'])) {
+            return false;
+        }
 
         return $user;
     }

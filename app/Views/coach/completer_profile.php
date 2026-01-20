@@ -56,7 +56,7 @@
         <?php endif; ?>
 
         <!-- Formulaire avec style "glassmorphism" et champs raffinés -->
-        <form method="POST" class="glass-card p-8 rounded-[2rem] shadow-2xl space-y-6">
+        <form method="POST" class="glass-card p-8 rounded-[2rem] shadow-2xl space-y-6" action="index.php?page=coach.completer_profile">
             <div class="space-y-2">
                 <label class="text-sm font-medium text-gray-300 ml-1">Biographie</label>
                 <textarea name="biographie" required
@@ -94,7 +94,7 @@
             <div class="space-y-2">
                 <label class="text-sm font-medium text-gray-300 ml-1">Photo de profil (URL)</label>
                 <div class="relative">
-                    <input type="text" name="photo" placeholder="https://..."
+                    <input type="url" name="photo" placeholder="https://..."
                         value="<?= htmlspecialchars(($profile['photo'] ?? '') )?>"
                         class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none input-focus pl-12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-4 w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -2,39 +2,36 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\CoachController;
+use App\Controllers\ReservationController;
 use App\Controllers\SportifController;
-use Core\Middleware\AuthMiddleware;
 
-
+// AUTH
 $router->get('/login', [AuthController::class, 'login']);
 $router->post('/login', [AuthController::class, 'login']);
 
 $router->get('/register', [AuthController::class, 'register']);
 $router->post('/register', [AuthController::class, 'register']);
 
-
-$router->get('/coach/dashbord', function () {
-    AuthMiddleware::role('coach');
-    (new CoachController())->dashbord();
-});
-
-$router->get('/coach/profile', function () {
-    AuthMiddleware::role('coach');
-    (new CoachController())->profile();
-});
-
-$router->post('/coach/profile', function () {
-    AuthMiddleware::role('coach');
-    (new CoachController())->profile();
-});
-
-$router->get('/coach/reservations', function () {
-    AuthMiddleware::role('coach');
-    (new CoachController())->reservations();
-});
+// DASHBOARDS
+$router->get('/coach/dashbord', [CoachController::class, 'dashbord']);
+$router->post('/coach/dashbord', [CoachController::class, 'dashbord']);
 
 
-$router->get('/sportif/dashbord', function () {
-    AuthMiddleware::role('sportif');
-    (new SportifController())->dashbord();
-});
+$router->get('/sportif/dashbord', [SportifController::class, 'dashbord']);
+$router->post('/sportif/dashbord', [SportifController::class, 'dashbord']);
+
+// Exemple pour les réservations (à créer plus tard)
+$router->get('/sportif/reservations', [SportifController::class, 'reservations']);
+
+// Séances
+$router->get('/sportif/seances', [SportifController::class, 'seances']);
+$router->post('/sportif/seances', [SportifController::class, 'seances']);
+
+// SPORTIF
+$router->post('/reservation/reserver', [ReservationController::class, 'reserver']);
+$router->get('/sportif/mes_reservations', [ReservationController::class, 'mesReservations']);
+$router->post('/reservation/annuler', [ReservationController::class, 'annuler']);
+
+// COACH
+$router->get('/coach/reservations', [ReservationController::class, 'reservationsCoach']);
+$router->post('/coach/reservation/statut', [ReservationController::class, 'changerStatut']);

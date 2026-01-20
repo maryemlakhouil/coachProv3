@@ -43,7 +43,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" class="space-y-5" action="/auth/login">
+                    <form method="POST" class="space-y-5" action="index.php?page=login">
                         <div class="space-y-2">
                             <label class="text-sm font-medium text-gray-300 ml-1">Adresse email</label>
                             <div class="relative group">
@@ -78,7 +78,7 @@
 
                     <p class="text-sm text-gray-500 mt-10 text-center">
                         Pas encore de compte ?
-                        <a href="/auth/register.php" class="text-custom-purple font-semibold hover:text-custom-purple/80 transition-colors">Créer un compte</a>
+                        <a href="index.php?page=register" class="text-custom-purple font-semibold hover:text-custom-purple/80 transition-colors">Créer un compte</a>
                     </p>
                 </div>
             </div>

@@ -1,73 +1,54 @@
 <?php
+
 namespace Core;
 
 class Router
 {
-    private array $routes = [
-        'GET'  => [],
-        'POST' => [],
-    ];
-
-    /* ==========================
-       DÉCLARATION DES ROUTES
-    ========================== */
-
-    public function get(string $path, $callback): void
-    {
-        $this->routes['GET'][$this->normalize($path)] = $callback;
-    }
-
-    public function post(string $path, $callback): void
-    {
-        $this->routes['POST'][$this->normalize($path)] = $callback;
-    }
-
-    /* ==========================
-       DISPATCH
-    ========================== */
-
     public function dispatch(): void
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri = $this->normalize($uri);
+        // Sans mod_rewrite → ?page=
+        $page = $_GET['page'] ?? 'login';
 
-        if (!isset($this->routes[$method][$uri])) {
-            http_response_code(404);
-            echo "404 - Page introuvable";
-            return;
+        switch ($page) {
+
+            case 'login':
+                require_once BASE_PATH . '/app/Controllers/AuthController.php';
+                (new \App\Controllers\AuthController())->login();
+                break;
+
+            case 'register':
+                require_once BASE_PATH . '/app/Controllers/AuthController.php';
+                (new \App\Controllers\AuthController())->register();
+                break;
+
+            case 'logout':
+                require_once BASE_PATH . '/app/Controllers/AuthController.php';
+                (new \App\Controllers\AuthController())->logout();
+                break;
+            case 'dashbord_coach':
+                require_once BASE_PATH . '/app/Controllers/CoachController.php';
+                (new \App\Controllers\CoachController())->dashboard();
+                break;
+
+            case 'dashbord':
+                require_once BASE_PATH . '/app/Controllers/SportifController.php';
+                (new \App\Controllers\SportifController())->dashboard();
+                break;
+            case 'mes_reservations':
+                require_once BASE_PATH . '/app/Controllers/SportifController.php';
+                (new \App\Controllers\SportifController())->listReservations();
+                break;
+            case 'seances':
+                    require_once BASE_PATH . '/app/Controllers/SportifController.php';
+                    (new \App\Controllers\SportifController())->seances();
+                    break;
+            case 'completer_profile':
+                    require_once BASE_PATH . '/app/Controllers/CoachController.php';
+                    (new \App\Controllers\CoachController())->completerProfile();
+                    break;
+            default:
+                http_response_code(404);
+                echo "404 - Page introuvable";
         }
-
-        $callback = $this->routes[$method][$uri];
-
-        /* Callback sous forme : [Controller::class, 'method'] */
-        if (is_array($callback)) {
-            [$controller, $method] = $callback;
-            $controllerInstance = new $controller();
-            call_user_func([$controllerInstance, $method]);
-            return;
-        }
-
-        /* Callback anonyme */
-        if (is_callable($callback)) {
-            call_user_func($callback);
-            return;
-        }
-
-        throw new \Exception("Route invalide");
-    }
-
-    /* ==========================
-       UTILS
-    ========================== */
-
-    private function normalize(string $path): string
-    {
-        if ($path === '') {
-            return '/';
-        }
-
-        $path = '/' . trim($path, '/');
-        return rtrim($path, '/') ?: '/';
     }
 }

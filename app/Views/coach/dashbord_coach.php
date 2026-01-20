@@ -31,15 +31,15 @@
             </div>
             
             <nav class="space-y-1.5">
-                <a href="/coach/dashbord" class="flex items-center gap-3.5 px-4 py-3 text-sm font-semibold rounded-xl bg-purple-600/10 text-purple-400 border border-purple-500/20 transition-all">
+                <a href="index.php?page=coach.dashbord" class="flex items-center gap-3.5 px-4 py-3 text-sm font-semibold rounded-xl bg-purple-600/10 text-purple-400 border border-purple-500/20 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                     Dashboard
                 </a>
-                <a href="/coach/profile"class="flex items-center gap-3.5 px-4 py-3 text-sm font-medium text-muted-custom hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                <a href="index.php?page=coach.profile"class="flex items-center gap-3.5 px-4 py-3 text-sm font-medium text-muted-custom hover:text-white hover:bg-white/5 rounded-xl transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Mon Profil
                 </a>
-                <a href="/coach/reservations" class="flex items-center gap-3.5 px-4 py-3 text-sm font-medium text-muted-custom hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                <a href="index.php?page=coach.reservations" class="flex items-center gap-3.5 px-4 py-3 text-sm font-medium text-muted-custom hover:text-white hover:bg-white/5 rounded-xl transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     Réservations
                 </a>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="mt-auto p-8 border-t border-subtle">
-            <a href="Views/auth/logout" class="flex items-center gap-3.5 px-4 py-3 text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
+            <a href="index.php?page=auth.logout" class="flex items-center gap-3.5 px-4 py-3 text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Déconnexion
             </a>
@@ -133,7 +133,7 @@
                     </div>
                     
                     <div id="add-dispo-form" class="p-10 bg-[#212121] border-b border-subtle hidden animate-in slide-in-from-top duration-300">
-                        <form method="POST" class="grid md:grid-cols-3 gap-6">
+                        <form method="POST" class="grid md:grid-cols-3 gap-6" action="index.php?page=coach.dashbord" >
                             <input type="hidden" name="add_dispo">
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-muted-custom uppercase tracking-[0.15em]">Date de séance</label>
@@ -189,7 +189,7 @@
                                     </td>
                                     <td class="px-10 py-7 text-right">
                                         <?php if ($d['status'] === 'libre'): ?>
-                                            <a href="?delete_dispo=<?= $d['id'] ?>" class="text-[11px] font-bold text-red-400/80 hover:text-red-400 uppercase tracking-widest transition-colors hover:underline underline-offset-8 decoration-2">
+                                            <a href="index.php?page=coach.deleteDispo&id=<?= $d['id'] ?>"class="text-[11px] font-bold text-red-400/80 hover:text-red-400 uppercase tracking-widest transition-colors hover:underline underline-offset-8 decoration-2">
                                                 Supprimer
                                             </a>
                                         <?php else: ?>
